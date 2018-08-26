@@ -1,0 +1,17 @@
+[package]
+authors = ["Yuri Iozzelli <y.iozzelli@gmail.com>"]
+description = "A simple TOTP login manager"
+name = "totp-cli"
+version = "0.1.0"
+license = "MIT"
+
+[dependencies]
+app_dirs = "1.2.1"
+basic-otp = "0.1.1"
+console = "0.6.1"
+data-encoding = "2.1.1"
+pbr = "1.0.1"
+serde = "1.0.75"
+serde_derive = "1.0.75"
+structopt = "0.2.10"
+toml = "0.4.6"
