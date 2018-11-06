@@ -467,7 +467,7 @@ dependencies = [
 
 [[package]]
 name = "totp-cli"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "app_dirs 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "basic-otp 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
