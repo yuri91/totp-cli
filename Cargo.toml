@@ -2,7 +2,7 @@
 authors = ["Yuri Iozzelli <y.iozzelli@gmail.com>"]
 description = "A simple TOTP login manager"
 name = "totp-cli"
-version = "0.1.0"
+version = "0.2.0"
 license = "MIT"
 
 [dependencies]
