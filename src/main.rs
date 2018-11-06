@@ -1,5 +1,7 @@
 extern crate basic_otp;
 extern crate structopt;
+#[macro_use]
+extern crate clap;
 extern crate toml;
 #[macro_use]
 extern crate serde_derive;
@@ -14,6 +16,16 @@ use data_encoding::BASE32;
 use structopt::StructOpt;
 
 use std::collections::HashMap;
+
+arg_enum! {
+    #[derive(Debug)]
+    enum Shell {
+        Bash,
+        Fish,
+        Zsh,
+        PowerShell,
+    }
+}
 
 #[derive(StructOpt, Debug)]
 struct Opt {
@@ -50,6 +62,17 @@ enum Cmd {
         #[structopt(short = "n", long = "name", help = "The login name")]
         name: String,
     },
+    #[structopt(name = "get-completion", about = "Print a completion script for the shell")]
+    GetCompletion {
+        #[structopt(
+            short = "s",
+            long = "shell",
+            help = "The shell for which to generate the completion script",
+            default_value = "Bash",
+            raw(possible_values = "&Shell::variants()", case_insensitive = "true")
+        )]
+        shell: Shell,
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -142,6 +165,15 @@ fn main() -> Result<(), Box<std::error::Error>> {
                 Cmd::Rm { name } => {
                     logins.remove(&name);
                     save_logins(&config, &logins)?;
+                }
+                Cmd::GetCompletion { shell } => {
+                    let shell = match shell {
+                        Shell::Bash => clap::Shell::Bash,
+                        Shell::Fish => clap::Shell::Fish,
+                        Shell::Zsh => clap::Shell::Zsh,
+                        Shell::PowerShell => clap::Shell::PowerShell,
+                    };
+                    Opt::clap().gen_completions_to(APP_INFO.name, shell, &mut std::io::stdout());
                 }
             }
         }
