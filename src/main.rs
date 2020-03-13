@@ -85,7 +85,7 @@ const APP_INFO: AppInfo = AppInfo {
     author: "Yuri91",
 };
 
-fn get_logins(config: &PathBuf) -> Result<HashMap<String, Login>, Box<std::error::Error>> {
+fn get_logins(config: &PathBuf) -> Result<HashMap<String, Login>, Box<dyn std::error::Error>> {
     let f = std::fs::read_to_string(config);
     let logins: HashMap<String, Login> = if let Ok(s) = f {
         toml::from_str(&s)?
@@ -94,12 +94,12 @@ fn get_logins(config: &PathBuf) -> Result<HashMap<String, Login>, Box<std::error
     };
     Ok(logins)
 }
-fn save_logins(config: &PathBuf, logins: &HashMap<String, Login>) -> Result<(), Box<std::error::Error>> {
+fn save_logins(config: &PathBuf, logins: &HashMap<String, Login>) -> Result<(), Box<dyn std::error::Error>> {
     let out = toml::to_string(&logins)?;
     std::fs::write(&config, out.as_bytes())?;
     Ok(())
 }
-fn list(logins: &HashMap<String, Login>, min: u32) -> Result<(), Box<std::error::Error>> {
+fn list(logins: &HashMap<String, Login>, min: u32) -> Result<(), Box<dyn std::error::Error>> {
     let mut first = true;
     let mut off = 0;
     for (name, login) in logins {
@@ -122,7 +122,7 @@ fn list(logins: &HashMap<String, Login>, min: u32) -> Result<(), Box<std::error:
     }
     Ok(())
 }
-fn get(name: &str, logins: &HashMap<String, Login>, min: u32) -> Result<(), Box<std::error::Error>> {
+fn get(name: &str, logins: &HashMap<String, Login>, min: u32) -> Result<(), Box<dyn std::error::Error>> {
     let key = match logins.get(name) {
         Some(v) => BASE32.decode(v.key.as_bytes())?,
         None => {
@@ -143,7 +143,7 @@ fn get(name: &str, logins: &HashMap<String, Login>, min: u32) -> Result<(), Box<
     println!("{}", slot.code);
     Ok(())
 }
-fn main() -> Result<(), Box<std::error::Error>> {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let opt = Opt::from_args();
     let config = opt.config.unwrap_or_else(|| {
         let mut path = app_root(AppDataType::UserData, &APP_INFO).unwrap();
