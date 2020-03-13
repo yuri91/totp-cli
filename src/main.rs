@@ -69,7 +69,8 @@ enum Cmd {
             long = "shell",
             help = "The shell for which to generate the completion script",
             default_value = "Bash",
-            raw(possible_values = "&Shell::variants()", case_insensitive = "true")
+            possible_values = &Shell::variants(),
+            case_insensitive = true,
         )]
         shell: Shell,
     }
